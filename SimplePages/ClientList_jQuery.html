@@ -1,0 +1,523 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<!--
+
+      This example makes use of the standard Bootstrap "Modern Business" template,
+      which is downloadable from:
+
+          https://startbootstrap.com/template-overviews/modern-business/
+
+
+      The objectives of this example are as follows:
+
+        1) Obtain a list of clients from a REST service and display this list
+           within an HTML table;
+
+        2) Obtain the details of a user-selected client from a REST service and
+           display these details within an HMTL form.
+
+-->
+
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>HypoSure Demo</title>
+
+    <!-- Bootstrap Core CSS -->
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom CSS -->
+    <link href="css/modern-business.css" rel="stylesheet">
+
+    <!-- Custom Fonts -->
+    <link href="font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+
+    <!-- HypoSure CSS -->
+    <link href="css/HypoSure.css" rel="stylesheet">
+
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+
+</head>
+
+<body>
+
+    <!-- Navigation -->
+    <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+        <div class="container">
+            <!-- Brand and toggle get grouped for better mobile display -->
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="index.html">HypoSure Demo</a>
+            </div>
+            <!-- Collect the nav links, forms, and other content for toggling -->
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                <ul class="nav navbar-nav navbar-right">
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">Demo <b class="caret"></b></a>
+                        <ul class="dropdown-menu">
+                            <li>
+                                <a href="ClientList_jQuery.html"> Simple Pages - Client List (jQuery)</a>
+                            </li>
+
+                        </ul>
+                    </li>
+
+                </ul>
+            </div>
+            <!-- /.navbar-collapse -->
+        </div>
+        <!-- /.container -->
+    </nav>
+
+    <!-- Page Content -->
+    <div class="container">
+
+        <!-- Page Heading/Breadcrumbs -->
+        <div class="row">
+            <div class="col-lg-12">
+                <h1 class="page-header">Client List
+                    <small>Simple Page (jQuery)</small>
+                </h1>
+                <ol class="breadcrumb">
+                    <li><a href="index.html">Home</a>
+                    </li>
+                    <li class="active">Client List</li>
+                </ol>
+            </div>
+        </div>
+        <!-- /.row -->
+
+
+        <!-- The Bootstrap grid row containing the client master-detail information. -->
+        <div class="row">
+
+
+            <!-- The Bootstrap grid columns containing the client list table. -->
+            <div class="col-md-7">
+
+                <!-- The table containing the list of clients. -->
+                <table id="clientsTable" class="table table-hover businessObjectList">
+
+                    <!-- The header of the client list table. -->
+                    <thead>
+
+                        <!-- The table header row containing the actual headings. -->
+                        <tr>
+                            <th>#</th>
+                            <th>ID Number</th>
+                            <th>Name</th>
+                            <th>Surname</th>
+                            <th>Title</th>
+                            <th>Language</th>
+                        </tr>
+                    </thead>
+
+                    <!-- The body of the client list table, where a row for each client will be added. -->
+                    <tbody>
+
+                        <tr>
+                            <td colspan="6">
+                                <span>
+                                      <!-- Displays an initial loading message, whilst obtaining the list of client from the REST service. -->
+                                      <img src="images/loading.gif" /> Obtaining client list . . .
+                                </span>
+                            </td>
+                        </tr>
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+
+            <!-- The Bootstrap grid columns containing the client details form. -->
+            <div class="col-md-5">
+
+                <!-- The Bootstrap panel containing the client details form. -->
+                <div class="panel panel-default businessObjectForm">
+
+                    <!-- The header of the client details form. -->
+                    <div class="panel-heading" style="">
+
+                        <span id="clientFormHeaderText" style="width:85%; display: inline-block;">
+                          Client Details:
+                        </span>
+
+                        <span class="dropdown">
+
+                            <button type="button" class="btn btn-default btn-md dropdown-toggle" data-toggle="dropdown">
+                                <span class="glyphicon glyphicon-menu-hamburger" aria-hidden="true"></span>
+                            </button>
+
+                            <ul class="dropdown-menu">
+                                <li id="viewPoliciesMenuOption" class="disabled">
+                                    <a href="#">View Policies</a>
+                                </li>
+                            </ul>
+
+                        </span>
+
+                    </div>
+
+                    <!-- The body of the client details panel. -->
+                    <div class="panel-body" style="padding: : 20px;">
+
+                        <!-- The client details form, itself. -->
+                        <form id="clientDetailsForm">
+
+                            <!-- The client's telephone number field. -->
+                            <div class="form-group">
+
+                                <label for="phoneTextInput">Telephone:</label>
+
+                                <input type="tel" id="phoneTextInput" class="form-control" placeholder="+27 (0)11 234 5678">
+
+                            </div>
+
+                            <!-- The client's email address field. -->
+                            <div class="form-group">
+
+                                <label for="emailInput">Email Address:</label>
+
+                                <input type="email" id="emailInput" class="form-control"  placeholder="name@domain.co.za">
+
+                            </div>
+
+                            <!-- The client's twitter handle field. -->
+                            <div class="form-group">
+
+                                <label for="twitterHandleTextInput">Twitter Handle:</label>
+
+                                <input type="text" id="twitterHandleTextInput" class="form-control" placeholder="#my_handle">
+
+                            </div>
+
+                            <!-- The client's first address field. -->
+                            <div class="form-group">
+
+                                <label for="address1TextInput">Address 1:</label>
+
+                                <input type="text" id="address1TextInput" class="form-control" >
+
+                            </div>
+
+                            <!-- The client's second address field. -->
+                            <div class="form-group">
+
+                                <label for="address2TextInput">Address 2:</label>
+
+                                <input type="text" id="address2TextInput" class="form-control" >
+
+                            </div>
+
+                            <!-- The client's third address field. -->
+                            <div class="form-group">
+
+                                <label for="address3TextInput">Address 3:</label>
+
+                                <input type="text" id="address3TextInput" class="form-control" >
+
+                            </div>
+
+                            <!-- The client's postal code field. -->
+                            <div class="form-group">
+
+                                <label for="postalCodeTextInput">Postal Code:</label>
+
+                                <input type="text" id="postalCodeTextInput" class="form-control" maxlength="4" placeholder="9999">
+
+                            </div>
+
+
+                        </form>
+
+                        <!-- Displays a loading message, whilst obtaining the details of the selected client,rom the REST service. -->
+                        <div id="clientDetailsLoadingMessage">
+                            <img src="images/loading.gif" /> Obtaining client details . . .
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+        <!-- /.row -->
+
+        <!-- Footer -->
+        <!--
+        <footer>
+            <div class="row">
+                <div class="col-lg-12">
+                    <p style="font-size: x-small;">Copyright &copy; ThoughMakers 2017 </p>
+                    <p style="font-size: xx-small;"> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; ... for the REST of your {iSeries} life. </p>
+                </div>
+            </div>
+
+      </footer>
+      -->
+
+    </div>
+
+
+    <!-- jQuery -->
+    <script src="js/jquery.js"></script>
+
+
+    <!-- Bootstrap Core JavaScript -->
+    <script src="js/bootstrap.min.js"></script>
+
+
+
+    <script type="text/javascript">
+
+
+      // Obtain the list of clients, once the HTML document has been loaded.
+      $(document).ready( getClientListFromRestApi );
+
+
+
+      // Obtains the (JSON serialized) list of clients, from the REST service:
+      //
+      function getClientListFromRestApi() {
+
+          // Specify the AJAX settings, for the call to clients REST service:
+          var ajaxCallSettings =
+                {
+                    //url: 'http://41.193.214.130:2511/tidemodev/clt_list', // specify the URL to be called,
+                    url: 'http://41.193.214.130:2510/eiftidemo/clt_list', // specify the URL to be called,
+
+                    type: 'get',  // specify "get" as the type of HTTP request,
+
+                    dataType: 'json',  // indicate that JSON data is to be returned,
+
+                    success: displayClientListInTable,  // specify the callback function of a successfull call,
+
+                    error: displayClientListError  // specify the callback function of an unsuccessfull call.
+                };
+
+          // Perform the actual AJAX call to the clients REST API, using the above settings.
+          $.ajax( ajaxCallSettings );
+
+      }
+
+
+
+      // Displays the list of clients (from the REST API), in the clients HTML table:
+      //
+      function displayClientListInTable( data ) {
+
+          // Construct the HTML Table rows, for the clients returned from the REST API,
+          var clientRowsHtml = constructClientRowsHtml( data.clients );
+
+          // add the constructed HTML client rows , to the clients HTML Table,
+          $('#clientsTable > TBODY').html( clientRowsHtml );
+
+          // specify the "on-click" event handler of each row:
+          $('#clientsTable > TBODY > TR').on('click', function( event) {
+
+              // obtain the user-selected row,
+              var selectedRow = $(event.target).parent();
+
+              // obtain the client number of the user-selected row,
+              var clientNumber = selectedRow.children(':first').text();
+
+              // obtain the details of the user-selected client, from the REST service.
+              getClientDetailsFromRestApi(clientNumber);
+
+          });
+
+      }
+
+
+
+      // Construct the client HTML table rows, for the specified clients array:
+      //
+      function constructClientRowsHtml( clients ) {
+
+          var clientRowsHtml = '';
+
+          // For each of the  10 clients, in the clients array:
+          for (i = 0; i < 10; i++) {
+
+              // construct an HTML table row, for the ith client:
+              clientRowsHtml += '<TR>';
+              clientRowsHtml += '<TD>' + clients[i].client + '</TD>';
+              clientRowsHtml += '<TD>' + clients[i].clientIDNo + '</TD>';
+              clientRowsHtml += '<TD>' + clients[i].clientName + '</TD>';
+              clientRowsHtml += '<TD>' + clients[i].clientSurname + '</TD>';
+              clientRowsHtml += '<TD>' + clients[i].clientTitle + '</TD>';
+              clientRowsHtml += '<TD>' + clients[i].clientLanguage + '</TD>';
+              clientRowsHtml += '</TR>';
+
+          };
+
+          // return the constructed HTML table rows.
+          return clientRowsHtml;
+
+      }
+
+
+
+      // Displays the error message returned from an unsuccessful AJAX call to
+      // the client list REST service:
+      //
+      function displayClientListError( xmlHttpRequest, status, error ) {
+
+            // Concatenate the error message to be displayed,
+            var errorMessage = '';
+            errorMessage += 'Unable to obtain the list of clients. ';
+            errorMessage += xmlHttpRequest.responseText;
+            errorMessage += error;
+
+            // display the concatenated error message.
+            $('#clientsTable > TBODY TD').html( errorMessage );
+
+      }
+
+
+
+
+      // Obtains the (JSON serialized) details of the specified client,
+      // from the client details REST service:
+      //
+      function getClientDetailsFromRestApi( clientNumber ) {
+
+          // Concatenate the URL for the call to the client details REST service.
+          var clientDetailsRestApiUrl = '';
+          clientDetailsRestApiUrl += 'http://41.193.214.130:2510/eiftidemo/CLT_DET?client=';
+          clientDetailsRestApiUrl += clientNumber;
+
+          // Specify the AJAX settings, for the call to clients REST service:
+          var ajaxCallSettings =
+              {
+                  url: clientDetailsRestApiUrl, // specify the URL to be called,
+
+                  type: 'get',  // specify "get" as the type of HTTP request,
+
+                  dataType: 'json',  // indicate that JSON data is to be returned,
+
+                  success: displayClientDetailsInForm,  // specify the callback function of a successfull call,
+
+                  error: displayClientDetailsError  // specify the callback function of an unsuccessfull call.
+              };
+
+          // Perform the actual AJAX call to the clients REST API, using the above settings.
+          $.ajax( ajaxCallSettings );
+
+
+          // Hide the client details form and display the loading message,
+          $( '#clientDetailsForm' ).hide( 'fast' );
+          $( '#clientDetailsLoadingMessage' ).show( 'fast' );
+
+          // remember the number of the currently selected client.
+          $( '#clientDetailsForm' ).data( 'selectedClientNumber', clientNumber );
+
+
+      }
+
+
+
+
+      // Displays the specified client's details (returned from the REST
+      // service) within the client's HTML form:
+      //
+      function displayClientDetailsInForm( data ) {
+
+          // Obtain the "client" object from the data returned,
+          var client = data.client[0];
+
+          // concatenate the header of the client form,
+          var clientFormHeader = '';
+          clientFormHeader += '<b>';
+          clientFormHeader += client.clientName + ' ' + client.clientSurname;
+          clientFormHeader += ' Details: ';
+          clientFormHeader += '</b>';
+
+          // display the header of the client form,
+          $('#clientFormHeaderText').html( clientFormHeader );
+
+          // display the required data fields within the client form,
+          $( phoneTextInput ).val( client.clientPhone );
+          $( emailInput ).val( client.clientEmail );
+          $( twitterHandleTextInput ).val( client.clientTwitter );
+          $( address1TextInput ).val( client.clientAddr1 );
+          $( address2TextInput ).val( client.clientAddr2 );
+          $( address3TextInput ).val( client.clientAddr3 );
+          $( postalCodeTextInput ).val( client.clientAddCode );
+
+          // it is now safe to display the view policies button.
+          $( viewPoliciesMenuOption ).removeClass("disabled");
+
+          // Hide the loading message and dislay client details form.
+          $( '#clientDetailsLoadingMessage' ).hide( 'fast' );
+          $( '#clientDetailsForm' ).show( 'slow' );u
+
+      }
+
+
+
+      // Displays the error message returned from an unsuccessful AJAX call to
+      // the client details REST service:
+      //
+      function displayClientDetailsError( xmlHttpRequest, status, error ) {
+
+            // Concatenate the error message to be displayed,
+            var errorMessage = '';
+            errorMessage += 'Unable to obtain client details. ';
+          //errorMessage += xmlHttpRequest.responseText;
+            errorMessage += error;
+
+            // display the concatenated error message.
+            $('.panel-body').text( errorMessage );
+
+      }
+
+
+
+      // Handles the 'click' event of the "View Policies" button.
+      //
+      $( viewPoliciesMenuOption ).on( 'click', function() {
+
+          // Obtain the client number of the currently selected client,
+          var clientNumber = $( '#clientDetailsForm' ).data( 'selectedClientNumber' );
+
+          // if a client has not been selected by the user:
+          if (clientNumber == undefined)
+            return false;  // then do nothing.
+
+          // Concatenate the URL of the policy list web page,
+          var policyListUrl = '';
+          policyListUrl += 'PolicyList_jQuery.html?clientNumber=';
+          policyListUrl += clientNumber;
+
+          // go to the policy list web page.
+          window.location.href  = policyListUrl;
+
+      });
+
+
+    </script>
+
+</body>
+
+</html>

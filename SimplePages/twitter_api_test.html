@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title></title>
+  </head>
+  <body>
+
+    <img src = "http://pbs.twimg.com/profile_images/758206571897876480/LZqAyUEp_normal.jpg" />
+
+
+    <script src="jquery.js"></script>
+
+    <script type="text/javascript">
+
+    $.support.cors = true;
+
+    console.log(1);
+
+    // Perform the AJAX call requesting list of tweets from the REST service:
+    $.ajax({
+      type: "get",
+      url: "http://41.193.214.132:8000/gettweets?twitterHandle=@BrandonTMdata"
+    })
+
+    // the handler of a successfull call to the REST API:
+    .done( function( data ) {
+      console.log(2);
+      console.log(data);
+    })
+
+    // the handler of an unsuccessfull call to the REST API:
+    .fail( function( xmlHttpRequest, status, error ) {
+      console.log(3);
+      console.log(xmlHttpRequest);
+      });
+
+
+    </script>
+
+  </body>
+</html>

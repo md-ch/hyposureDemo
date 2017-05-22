@@ -1,0 +1,837 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<!--
+
+      This example makes use of the standard Bootstrap "Modern Business" template,
+      which is downloadable from:
+          https://startbootstrap.com/template-overviews/modern-business/
+
+      The objectives of this example are as follows:
+
+      1) Obtain a list of policies (for a specified client) from a REST service
+         and display this list within an HTML table;
+
+        2) Obtain the details of a user-selected policy from a REST service and
+           display these details within an HMTL form.
+
+-->
+
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>HypoSure Demo</title>
+
+    <!-- Bootstrap Core CSS -->
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom CSS -->
+    <link href="css/modern-business.css" rel="stylesheet">
+
+    <!-- Custom Fonts -->
+    <link href="font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+
+    <!-- HypoSure CSS -->
+    <link href="css/HypoSure.css" rel="stylesheet">
+
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+
+</head>
+
+<body>
+
+    <!-- Navigation -->
+    <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+        <div class="container">
+            <!-- Brand and toggle get grouped for better mobile display -->
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="index.html">HypoSure Demo</a>
+            </div>
+            <!-- Collect the nav links, forms, and other content for toggling -->
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                <ul class="nav navbar-nav navbar-right">
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">Demo <b class="caret"></b></a>
+                        <ul class="dropdown-menu">
+                            <li>
+                                <a href="PolicyList_jQuery.html"> Simple Pages - Policy List (ReactJS)</a>
+                            </li>
+
+                        </ul>
+                    </li>
+
+                </ul>
+            </div>
+            <!-- /.navbar-collapse -->
+        </div>
+        <!-- /.container -->
+    </nav>
+
+    <!-- Page Content -->
+    <div class="container">
+
+        <!-- Page Heading/Breadcrumbs -->
+        <div class="row">
+            <div class="col-lg-12">
+                <h1 class="page-header">Policy List
+                    <small>Simple Page (ReactJS)</small>
+                </h1>
+                <ol class="breadcrumb">
+                    <li>
+                      <a href="index.html">Home</a>
+                    </li>
+                    <li>
+                      <a href="ClientList_ReactJS.html">Client List</a>
+                    </li>
+                    <li class="active">
+                      Policy List
+                    </li>
+                </ol>
+            </div>
+        </div>
+        <!-- /.row -->
+
+        <!-- The Bootstrap grid row containing the policy master-detail information. -->
+        <div class="row">
+
+            <!-- The Bootstrap grid columns containing the policy list table. -->
+            <div id="policyListContainer" class="col-md-7">
+
+            </div>
+
+            <!-- The Bootstrap grid columns containing the policy details form. -->
+            <div id="policyDetailsContainer" class="col-md-5">
+
+            </div>
+
+        </div>
+        <!-- /.row -->
+
+        <!-- Footer -->
+        <!--
+        <footer>
+            <div class="row">
+                <div class="col-lg-12">
+                    <p style="font-size: x-small;">Copyright &copy; ThoughMakers 2017 </p>
+                    <p style="font-size: xx-small;"> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; ... for the REST of your {iSeries} life. </p>
+                </div>
+            </div>
+      </footer>
+      -->
+
+    </div>
+
+    <!-- jQuery -->
+    <script src="js/jquery.js"></script>
+
+    <!-- Bootstrap Core JavaScript -->
+    <script src="js/bootstrap.min.js"></script>
+
+    <script src="build/react.js"></script>
+    <script src="build/react-dom.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-core/5.8.24/browser.min.js"></script>
+
+    <script type="text/babel">
+
+
+      // This ReactJS component implements an HTML table that displays the list
+      // of policies:
+      //
+      var PolicyList = React.createClass({
+
+        // A ReactJS method that sets the initial state of this component:
+        //
+        getInitialState: function () {
+
+          return {
+
+            displayContent: null,  // determines the content of the table's
+                                   // body, viz. a loading message, or the
+                                   // actual policy list, or an error message,
+
+            // the properties of the policy array obtained from the REST service,
+            policies : [{
+                        "policyNumber": null,
+                        "registrationNumber": null,
+                        "policyStatus": null,
+                        "inceptionDate": null,
+                        "premiumIncludingVat": null,
+                        "vehicleMakeModel": null
+                      }],
+
+            errorMessage: null  // the potential error message that may be
+                                // returned from the REST service.
+
+          };
+        },
+
+
+        // A ReactJS method that renders the actual HTML of this component:
+        //
+        render: function() {
+
+          return (
+
+            <table id="policiesTable"
+                   className="table table-hover businessObjectList">
+
+              {/* The header of the policy list table. */}
+              <thead>
+
+                {/* The table header row containing the headings. */}
+                <tr>
+                  <th>#</th>
+                  <th>Registration</th>
+                  <th>Status</th>
+                  <th>Inception Date</th>
+                  <th>Premium</th>
+                  <th>Vehicle</th>
+                </tr>
+              </thead>
+
+              {/* The component that implements the body of the policy list
+                  table. The displayed content may be:
+                    - a loading message, which is displayed whilst the policy
+                      list is retrieved from the REST service;
+                    - or the actual list of policies itself;
+                    - or an error message, if an error occured during retrieval
+                      of the policy list from the REST service.    */}
+
+              <PolicyListContent displayContent = { this.state.displayContent }
+                                 policies = { this.state.policies }
+                                 onClickHandler = { this.policyRowOnClickHandler }
+                                 errorMessage = { this.state.errorMessage } />
+
+            </table>
+
+          );
+        },
+
+
+        // The ReactJS life-cycle method that is executed once this component
+        // has been added to its containing DOM element:
+        //
+        componentDidMount: function() {
+
+          // Obtain the list of policies, from the REST service.
+          this.getPolicyListFromRestApi();
+
+        },
+
+
+        // Obtains the (JSON serialized) list of policies, from the REST service:
+        //
+        getPolicyListFromRestApi: function() {
+
+          // Update the component's state, so that the loading message is
+          // initially displayed within the body of the policy list table.
+          this.setState( { displayContent: 'LOADING' } );
+
+  				// concatenate the URL for the call to the policy list REST service.
+  				var policyListRestApiUrl = '';
+  				policyListRestApiUrl += 'http://41.193.214.130:2510/eiftidemo/POL_LIST?';
+  				policyListRestApiUrl += '&client=' + this.props.clientNumber;
+  				//alert(policyListRestApiUrl);
+
+          // Perform the AJAX call requesting list of policies from the REST service:
+          $.ajax({
+
+            // specify the URL of the REST service that is to be called,
+            url: policyListRestApiUrl
+
+          })
+
+          // the handler of a successfull call to the REST API:
+          .done( function( data ) {
+
+            // update the component's state, so that the list of policies may be
+            // displayed within the body of the policy list table.
+            this.setState( {
+              displayContent: 'POLICY_LIST',
+              policies: data.policies
+            });
+
+          }.bind( this ) )
+
+          // the handler of an unsuccessfull call to the REST API:
+          .fail( function( xmlHttpRequest, status, error ) {
+
+            // concatenate the error message to be displayed,
+            var errorMessage = '';
+            errorMessage += 'Unable to obtain the list of policies from the REST service. ';
+            errorMessage += error;
+
+            // update the component's state, so that the error message may be
+            // displayed within the body of the policy list table.
+            this.setState( {
+              displayContent: 'ERROR',
+              errorMessage: errorMessage
+            });
+
+          }.bind( this ) );
+
+        },
+
+
+        // Handles the on-click event, when a user selects a specific policy
+        // within the policy list table:
+        //
+        policyRowOnClickHandler: function(event) {
+
+          // Obtain the HTML table row that the user clicked on,
+          var policyRowDomElement = event.target.parentNode;
+
+          // obtain the policy number from the user-selected row,
+          var policyNumber =  policyRowDomElement.firstChild.innerText;
+
+          // obtain the specified policy's details, from the REST service.
+          this.getPolicyDetailsFromRestApi( this.props.clientNumber,
+                                            policyNumber );
+
+        },
+
+
+        // Obtains the (JSON serialized) policy details, for the specified
+        // policy, from the REST service:
+        //
+        getPolicyDetailsFromRestApi: function( clientNumber,
+                                               policyNumber ) {
+
+          // Display the loading message within the policy details component,
+          // whilst retrieving the policy's details from the REST service.
+          this.renderPolicyDetailsComponent( 'LOADING' );
+
+          // Concatenate the URL for the call to the policy details REST service.
+  				var policyDetailsRestApiUrl = '';
+  				policyDetailsRestApiUrl += 'http://41.193.214.130:2510/eiftidemo/POL_DET?';
+  				policyDetailsRestApiUrl += 'policy=' + policyNumber;
+  				policyDetailsRestApiUrl += '&client=' + clientNumber;
+  				//alert(policyDetailsRestApiUrl);
+
+          // perform the AJAX call requesting policy's details from the REST service:
+          $.ajax({
+
+            // specify the URL of the REST service that is to be called,
+            url: policyDetailsRestApiUrl
+
+          })
+
+          // the handler of a successfull call to the REST API:
+          .done( function( data ) {
+
+            // display the policy details within the policy details component.
+            this.renderPolicyDetailsComponent( 'POLICY_DETAILS',
+                                               data.policy[0] );
+
+
+          }.bind( this ) )
+
+          // the handler of an unsuccessfull call to the REST API:
+          .fail( function( xmlHttpRequest, status, error ) {
+
+            // concatenate the error message to be displayed,
+            var errorMessage = '';
+            errorMessage += 'Unable to obtain policy details from the REST service. ';
+            errorMessage += error;
+
+            // display the error message within the policy details component.
+            this.renderPolicyDetailsComponent( 'ERROR',
+                                               null,
+                                               errorMessage );
+
+          }.bind( this ) );
+
+        },
+
+
+        // Displays the details of policy within the policy details component:
+        //
+        renderPolicyDetailsComponent: function( displayContent,
+                                                policy,
+                                                errorMessage )
+        {
+
+          // Obtain the container element of the policy detail component,
+          var container = document.getElementById('policyDetailsContainer');
+
+          // if the policy detail component has not already been mounted within
+          // its container:
+          if (container.hasChildNodes()) {
+
+            // render the "PolicyDetails" component, within the specified
+            // container element, and then display the details of the specified
+            // policy,
+            ReactDOM.render(
+              <PolicyDetails displayContent = { displayContent }
+                             policy = { policy }
+                             errorMessage = { errorMessage } />,
+              container
+            );
+
+          }
+          else {
+
+            // rerender the "PolicyDetails" component, displaying the details of
+            // the specified policy.
+            <PolicyDetails displayContent = { displayContent }
+                           policy = { policy }
+                           errorMessage = { errorMessage } />
+          }
+
+        }
+
+      });
+
+
+
+      // A ReactJS component that implements the body of the policy list table:
+      //
+      var PolicyListContent = React.createClass({
+
+        // Specify the data-types of the various properties:
+        propTypes: {
+            displayContent: React.PropTypes.oneOf( [ 'LOADING',
+                                                     'POLICY_LIST',
+                                                     'ERROR' ] ),
+            policies: React.PropTypes.array,
+            onClickHandler: React.PropTypes.func,
+            errorMessage: React.PropTypes.string
+        },
+
+
+        // Specify the default values of the various properties:
+        getDefaultProps: function() {
+          return {
+            displayContent: 'LOADING'
+          };
+        },
+
+
+        // Render the actual HTML of the component(s):
+        render: function() {
+
+          var me = this;  // "remember" the context of this component,
+
+          var policiesTableBody;  // holds the actual rendered content for the
+                                 // the HTML table's body.
+
+          // Render the HTML table's body based on the required content:
+          switch (this.props.displayContent) {
+
+            // if the content to be displayed is the "loading message":
+            case 'LOADING':
+
+              // return the body of the table as a displayable loading message,
+              // which is displayed whilst calling the REST service,
+              policiesTableBody = (
+                <tr>
+                  <td colSpan={6}>
+                    <LoadingMessage message = { 'Obtaining policy list ...' } />
+                  </td>
+                </tr>
+              );
+
+              break;
+
+            // if the content to be displayed is the actual policy list:
+            case 'POLICY_LIST':
+
+              // return the body of the table as the actual policy list,
+              policiesTableBody = this.props.policies.slice(0,10).map( function(policy) {
+                return (
+                  <tr onClick = { me.props.onClickHandler } >
+                    <td> { policy.policyNumber } </td>
+                    <td> { policy.registrationNumber } </td>
+                    <td> { policy.policyStatus } </td>
+                    <td> { policy.inceptionDate } </td>
+                    <td> { policy.premiumIncludingVat } </td>
+                    <td> { policy.vehicleMakeModel } </td>
+                  </tr>
+                );
+              });
+
+              break;
+
+            // if the content to be displayed is an "error message":
+            case 'ERROR':
+
+              // return the body of the table as a displayable error message,
+              policiesTableBody = (
+                <tr>
+                  <td colSpan={6}>
+                    <ErrorMessage errorMessage = { this.props.errorMessage } />
+                  </td>
+                </tr>
+              );
+
+              break;
+
+            };
+
+          // return the appropriate table body content.
+          return (
+            <tbody>
+              { policiesTableBody }
+            </tbody>
+            );
+
+        }
+
+      });
+
+
+
+      // This ReactJS component that implements a Bootstrap panel containing an
+      // HTML form, which displays the details of a policy:
+      //
+      var PolicyDetails = React.createClass({
+
+        // Specify the data-types of the various properties:
+        propTypes: {
+            displayContent: React.PropTypes.oneOf( [ 'LOADING',
+                                                     'POLICY_DETAILS',
+                                                     'ERROR' ] ),
+            policy: React.PropTypes.object,
+            errorMessage: React.PropTypes.string
+        },
+
+
+        // Specify the default values of the various properties:
+        getDefaultProps: function() {
+          return {
+
+            // the properties of a policy that is obtained from the REST service,
+            policy : {
+              "expiryDate" : null,
+              "vehicleType": null,
+              "vehicleMake": null,
+              "vehicleModel": null,
+              "year": null,
+              "engineCC": null,
+              "wheelSize1": null,
+              "wheelSize2": null,
+              "noWheels": null,
+              "tyreMake": null,
+              "tyreValue": null,
+              "premiumIncludingVat": null,
+              "premiumExcludingVat": null,
+              "premiumVat": null,
+              "cancelReason": null
+            },
+          };
+        },
+
+
+        // A ReactJS method that renders the actual HTML of this component:
+        //
+        render: function() {
+
+          return (
+
+            <div className="panel panel-default businessObjectForm">
+
+              {/* The header of the policy details panel. */}
+              <div className="panel-heading">
+                <span id="policyFormHeaderText" style={{width: '85%', display: 'inline-block'}}>
+                  <b> Policy Details: </b>
+                </span>
+
+              </div>
+
+              {/* The body of the policy details panel. */}
+              <div className="panel-body" style={{padding: '20px'}}>
+
+                {/* The component that implements the contents of the policy
+                    details panel. The displayed content may be:
+                      - a loading message, which is displayed whilst the policy
+                        details are retrieved from the REST service;
+                      - or the actual details of the policy itself;
+                      - or an error message, if an error occured during
+                        retrieval of the policy details from the REST service.             */}
+
+                <PolicyDetailsContent displayContent = { this.props.displayContent }
+                                      policy = { this.props.policy }
+                                      errorMessage = { this.props.errorMessage } />
+
+              </div>
+
+            </div>
+
+          );
+        }
+
+      });
+
+
+
+      // A ReactJS component that implements the contents of the policy details
+      // panel:
+      //
+      var PolicyDetailsContent = React.createClass({
+
+        // Specify the data-types of the various properties:
+        propTypes: {
+            displayContent: React.PropTypes.oneOf( [ 'LOADING',
+                                                     'POLICY_DETAILS',
+                                                     'ERROR' ] ),
+            policy: React.PropTypes.object,
+            errorMessage: React.PropTypes.string
+        },
+
+
+        // Render the actual HTML of the component(s):
+        //
+        render: function() {
+
+          var me = this;  // "remember" the context of this component,
+
+          var content;  // "holds" the actual content that is rendered.
+
+          // Render the required content:
+          switch ( this.props.displayContent ) {
+
+            // if the content to be displayed is the "loading message":
+            case 'LOADING':
+
+              // return the content as a displayable loading message,
+              // which is displayed whilst calling the REST service,
+              content = (
+                <LoadingMessage message = { 'Obtaining policy details ...' } />
+              );
+
+              break;
+
+            // if the content to be displayed is the actual policy details:
+            case 'POLICY_DETAILS':
+
+              // return the actual policy details form,
+              content = (
+
+                <form id="policyDetailsForm">
+
+                  {/* The policy's "expiry date" field. */}
+                  <div className="form-group">
+                    <label htmlFor="expiryDateTextInput">Expiry Date:</label>
+                    <input id="expiryDateTextInput"
+                           className="form-control"
+                           value={ this.props.policy.expiryDate } />
+                  </div>
+                  {/* The policy's "vehicle type" field. */}
+                  <div className="form-group">
+                    <label htmlFor="vehicleTypeTextInput">Vehicle Type:</label>
+                    <input id="vehicleTypeTextInput"
+                           className="form-control"
+                           value={ this.props.policy.vehicleType } />
+                  </div>
+                  {/* The policy's "vehicle make" field. */}
+                  <div className="form-group">
+                    <label htmlFor="vehicleMakeTextInput">Vehicle Make:</label>
+                    <input id="vehicleMakeTextInput"
+                           className="form-control"
+                           value={ this.props.policy.vehicleMake } />
+                  </div>
+                  {/* The policy's "vehicle model" field. */}
+                  <div className="form-group">
+                    <label htmlFor="vehicleModelTextInput">Vehicle Model:</label>
+                    <input id="vehicleModelTextInput"
+                           className="form-control"
+                           value={ this.props.policy.vehicleModel } />
+                  </div>
+                  {/* The policy's "year" field. */}
+                  <div className="form-group">
+                    <label htmlFor="yearTextInput">Year:</label>
+                    <input id="yearTextInput"
+                           className="form-control"
+                           value={ this.props.policy.year } />
+                  </div>
+                  {/* The policy's "engine capacity" field. */}
+                  <div className="form-group">
+                    <label htmlFor="engineCCTextInput">Engine Capacity:</label>
+                    <input id="engineCCTextInput"
+                           className="form-control"
+                           value={ this.props.policy.engineCC } />
+                  </div>
+                  {/* The policy's "wheel size 1" field. */}
+                  <div className="form-group">
+                    <label htmlFor="wheelSize1TextInput">Wheel Size 1:</label>
+                    <input id="wheelSize1TextInput"
+                           className="form-control"
+                           value={ this.props.policy.wheelSize1 } />
+                  </div>
+                  {/* The policy's "wheel size 2" field. */}
+                  <div className="form-group">
+                    <label htmlFor="wheelSize2TextInput">Wheel Size 2:</label>
+                    <input id="wheelSize2TextInput"
+                           className="form-control"
+                           value={ this.props.policy.wheelSize2 } />
+                  </div>
+                  {/* The policy's "number of wheels" field. */}
+                  <div className="form-group">
+                    <label htmlFor="noWheelsTextInput">Number of Wheels:</label>
+                    <input id="noWheelsTextInput"
+                           className="form-control"
+                           value={ this.props.policy.noWheels } />
+                  </div>
+                  {/* The policy's "tyre make" field. */}
+                  <div className="form-group">
+                    <label htmlFor="tyreMakeTextInput">Tyre Make:</label>
+                    <input id="tyreMakeTextInput"
+                           className="form-control"
+                           value={ this.props.policy.tyreMake } />
+                  </div>
+                  {/* The policy's "tyre value" field. */}
+                  <div className="form-group">
+                    <label htmlFor="tyreValueTextInput">Tyre Value:</label>
+                    <input id="tyreValueTextInput"
+                           className="form-control"
+                           value={ this.props.policy.tyreValue } />
+                  </div>
+                  {/* The policy's "premium including vat" field. */}
+                  <div className="form-group">
+                    <label htmlFor="premiumIncludingVatTextInput">Premium Including VAT:</label>
+                    <input id="premiumIncludingVatTextInput"
+                           className="form-control"
+                           value={ this.props.policy.premiumIncludingVat } />
+                  </div>
+                  {/* The policy's "premium excluding vat" field. */}
+                  <div className="form-group">
+                    <label htmlFor="premiumExcludingVatTextInput">Premium Excluding VAT:</label>
+                    <input id="premiumExcludingVatTextInput"
+                           className="form-control"
+                           value={ this.props.policy.premiumExcludingVat } />
+                  </div>
+                  {/* The policy's "premium vat" field. */}
+                  <div className="form-group">
+                    <label htmlFor="premiumVatTextInput">Premium VAT:</label>
+                    <input id="premiumVatTextInput"
+                           className="form-control"
+                           value={ this.props.policy.premiumVat } />
+                  </div>
+                  {/* The policy's "cancellation reason" field. */}
+                  <div className="form-group">
+                    <label htmlFor="cancelReasonTextInput">Cancellation Reason:</label>
+                    <input id="cancelReasonTextInput"
+                           className="form-control"
+                           value={ this.props.policy.cancelReason } />
+                  </div>
+
+                </form>
+              );
+
+              break;
+
+            // if the content to be displayed is an "error message":
+            case 'ERROR':
+
+              // return the content as a displayable error message,
+              content = (
+                <ErrorMessage errorMessage = { this.props.errorMessage } />
+              );
+
+              break;
+
+          };
+
+          // return the appropriate content.
+          return (
+            <span>
+              { content }
+            </span>
+            );
+
+        }
+
+      });
+
+
+
+      // A ReactJS component, which implements an animated loading message that
+      // is to be displayed.
+      //
+      var LoadingMessage = React.createClass({
+
+        render: function() {
+
+          return (
+            <span>
+              {/* Display an initial loading message. */}
+              <img src="images/loading.gif" />  { this.props.message }
+            </span>
+          );
+        }
+      });
+
+
+
+      // A ReactJS component, which implements an error message that is
+      // displayed within a standard Bootstrap alert.
+      //
+      var ErrorMessage = React.createClass({
+
+        render: function() {
+
+          return (
+
+            <div className="alert alert-danger" role="alert">
+              <strong>Error! </strong>
+              {/* Display the specified error message. */}
+              { this.props.errorMessage }
+            </div>
+
+          );
+        }
+      });
+
+
+
+      // Obtain the required client number, from the URL,
+      var clientNumber = getParameterValueFromUrl( 'clientNumber' );
+
+
+      // Renders the "PolicyList" ReactJS component, within the specified container.
+      //
+      ReactDOM.render(
+        <PolicyList clientNumber = { clientNumber } />,
+        document.getElementById('policyListContainer')
+      );
+
+
+      // Obtains the value of the specified parameter, from this web page's URL:
+      //
+      function getParameterValueFromUrl( parameterName ) {
+
+      	var results = new RegExp('[\?&]' + parameterName + '=([^&#]*)').exec(window.location.href);
+
+      	if (results == null) {
+      		return null;
+      	}
+      	else {
+      		return results[1] || 0;
+      	}
+
+      }
+
+
+    </script>
+
+</body>
+
+</html>

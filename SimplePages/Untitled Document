@@ -1,0 +1,13 @@
+
+/*
+      	// If an error has occurred whilst calling the REST service:
+				if (data == ) {
+				
+					// display the error message returned from the REST service.
+					$('#policiesTable > TBODY').html( data.error );
+
+				} 
+
+				// Display the list of policies returned from the REST service:
+				else { 
+*/

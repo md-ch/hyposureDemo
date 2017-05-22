@@ -1,0 +1,455 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<!--
+
+      This example makes use of the standard Bootstrap "Modern Business" template,
+      which is downloadable from:
+          https://startbootstrap.com/template-overviews/modern-business/
+
+      The objective of this example are is as follows:
+
+      - Obtain a list of tweets (for a specified twitter handle) from a REST
+        service, which in turn, obtains these tweets from the Twitter REST API.
+        This list is then displayed within an HTML table.
+
+-->
+
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>HypoSure Demo</title>
+
+    <!-- Bootstrap Core CSS -->
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom CSS -->
+    <link href="css/modern-business.css" rel="stylesheet">
+
+    <!-- Custom Fonts -->
+    <link href="font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+
+    <!-- HypoSure CSS -->
+    <link href="css/HypoSure.css" rel="stylesheet">
+
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+
+</head>
+
+<body>
+
+    <!-- Navigation -->
+    <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+        <div class="container">
+            <!-- Brand and toggle get grouped for better mobile display -->
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="index.html">HypoSure Demo</a>
+            </div>
+            <!-- Collect the nav links, forms, and other content for toggling -->
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                <ul class="nav navbar-nav navbar-right">
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">Demo <b class="caret"></b></a>
+                        <ul class="dropdown-menu">
+                            <li>
+                                <a href="TweetList_jQuery.html"> Simple Pages - Tweet List (ReactJS)</a>
+                            </li>
+
+                        </ul>
+                    </li>
+
+                </ul>
+            </div>
+            <!-- /.navbar-collapse -->
+        </div>
+        <!-- /.container -->
+    </nav>
+
+    <!-- Page Content -->
+    <div class="container">
+
+        <!-- Page Heading/Breadcrumbs -->
+        <div class="row">
+            <div class="col-lg-12">
+                <h1 class="page-header">Tweet List
+                    <small>Simple Page (ReactJS)</small>
+                </h1>
+                <ol class="breadcrumb">
+                    <li>
+                      <a href="index.html">Home</a>
+                    </li>
+                    <li>
+                      <a href="ClientList_ReactJS.html">Client List</a>
+                    </li>
+                    <li class="active">
+                      Tweet List
+                    </li>
+                </ol>
+            </div>
+        </div>
+        <!-- /.row -->
+
+        <!-- The Bootstrap grid row containing the tweet master-detail information. -->
+        <div class="row">
+
+            <!-- The Bootstrap grid columns containing the tweet list table. -->
+            <div id="tweetListContainer" class="col-md-7">
+
+            </div>
+
+            <!-- The Bootstrap grid columns containing the tweet details form. -->
+            <div id="tweetDetailsContainer" class="col-md-5">
+
+            </div>
+
+        </div>
+        <!-- /.row -->
+
+        <!-- Footer -->
+        <!--
+        <footer>
+            <div class="row">
+                <div class="col-lg-12">
+                    <p style="font-size: x-small;">Copyright &copy; ThoughMakers 2017 </p>
+                    <p style="font-size: xx-small;"> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; ... for the REST of your {iSeries} life. </p>
+                </div>
+            </div>
+      </footer>
+      -->
+
+    </div>
+
+    <!-- jQuery -->
+    <script src="js/jquery.js"></script>
+
+    <!-- Bootstrap Core JavaScript -->
+    <script src="js/bootstrap.min.js"></script>
+
+    <script src="build/react.js"></script>
+    <script src="build/react-dom.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-core/5.8.24/browser.min.js"></script>
+
+    <script type="text/babel">
+
+
+      // This ReactJS component implements an HTML table that displays the list
+      // of tweets:
+      //
+      var TweetList = React.createClass({
+
+        // A ReactJS method that sets the initial state of this component:
+        //
+        getInitialState: function () {
+
+          return {
+
+            displayContent: null,  // determines the content of the table's
+                                   // body, viz. a loading message, or the
+                                   // actual tweet list, or an error message,
+
+            // the relevant properties of the tweet array obtained from the REST service,
+            tweets : [],
+
+            errorMessage: null  // the potential error message that may be
+                                // returned from the REST service.
+
+          };
+        },
+
+
+        // A ReactJS method that renders the actual HTML of this component:
+        //
+        render: function() {
+
+          return (
+
+            <table id="tweetsTable"
+                   className="table table-hover businessObjectList">
+
+              {/* The header of the tweet list table. */}
+              <thead>
+
+                {/* The table header row containing the headings. */}
+                <tr>
+                  <th className = "fa fa-twitter info" > { "  " } </th>
+                  <th>Tweets</th>
+                </tr>
+              </thead>
+
+              {/* The component that implements the body of the tweet list
+                  table. The displayed content may be:
+                    - a loading message, which is displayed whilst the tweet
+                      list is retrieved from the REST service;
+                    - or the actual list of tweets itself;
+                    - or an error message, if an error occured during retrieval
+                      of the tweet list from the REST service.    */}
+
+              <TweetListContent displayContent = { this.state.displayContent }
+                                 tweets = { this.state.tweets }
+                                 errorMessage = { this.state.errorMessage } />
+
+            </table>
+
+          );
+        },
+
+
+        // The ReactJS life-cycle method that is executed once this component
+        // has been added to its containing DOM element:
+        //
+        componentDidMount: function() {
+
+          // Obtain the list of tweets, from the REST service.
+          this.getTweetListFromRestApi();
+
+        },
+
+
+        // Obtains the (JSON serialized) list of tweets, from the REST service:
+        //
+        getTweetListFromRestApi: function() {
+
+          // Update the component's state, so that the loading message is
+          // initially displayed within the body of the tweet list table.
+          this.setState( { displayContent: 'LOADING' } );
+
+  				// concatenate the URL for the call to the tweet list REST service.
+  				var tweetListRestApiUrl = '';
+          //tweetListRestApiUrl += 'http://41.193.214.132:8000/gettweets?twitterHandle=@BrandonTMdata';
+          tweetListRestApiUrl += 'http://41.193.214.132:8000/gettweets?';
+  				tweetListRestApiUrl += 'twitterHandle=' + this.props.clientTwitterHandle;
+
+          $.support.cors = true;
+
+          // Perform the AJAX call requesting list of tweets from the REST service:
+          $.ajax({
+
+            // specify the URL of the REST service that is to be called,
+            url: tweetListRestApiUrl
+
+          })
+
+          // the handler of a successfull call to the REST API:
+          .done( function( data ) {
+
+            // update the component's state, so that the list of tweets may be
+            // displayed within the body of the tweet list table.
+            this.setState( {
+              displayContent: 'TWEET_LIST',
+              tweets: data
+            });
+
+          }.bind( this ) )
+
+          // the handler of an unsuccessfull call to the REST API:
+          .fail( function( xmlHttpRequest, status, error ) {
+
+            // concatenate the error message to be displayed,
+            var errorMessage = '';
+            errorMessage += 'Unable to obtain the list of tweets from the REST service. ';
+            errorMessage += error;
+
+            // update the component's state, so that the error message may be
+            // displayed within the body of the tweet list table.
+            this.setState( {
+              displayContent: 'ERROR',
+              errorMessage: errorMessage
+            });
+
+          }.bind( this ) );
+
+        }
+
+      });
+
+
+
+      // A ReactJS component that implements the body of the tweet list table:
+      //
+      var TweetListContent = React.createClass({
+
+        // Specify the data-types of the various properties:
+        propTypes: {
+            displayContent: React.PropTypes.oneOf( [ 'LOADING',
+                                                     'TWEET_LIST',
+                                                     'ERROR' ] ),
+            tweets: React.PropTypes.array,
+            errorMessage: React.PropTypes.string
+        },
+
+
+        // Specify the default values of the various properties:
+        getDefaultProps: function() {
+          return {
+            displayContent: 'LOADING'
+          };
+        },
+
+
+        // Render the actual HTML of the component(s):
+        render: function() {
+
+          var me = this;  // "remember" the context of this component,
+
+          var tweetsTableBody;  // holds the actual rendered content for the
+                                 // the HTML table's body.
+
+          // Render the HTML table's body based on the required content:
+          switch (this.props.displayContent) {
+
+            // if the content to be displayed is the "loading message":
+            case 'LOADING':
+
+              // return the body of the table as a displayable loading message,
+              // which is displayed whilst calling the REST service,
+              tweetsTableBody = (
+                <tr>
+                  <td colSpan={2}>
+                    <LoadingMessage message = { 'Obtaining tweet list ...' } />
+                  </td>
+                </tr>
+              );
+
+              break;
+
+            // if the content to be displayed is the actual tweet list:
+            case 'TWEET_LIST':
+
+              // return the body of the table as the actual tweet list,
+              tweetsTableBody = this.props.tweets.map( function(tweet) {
+                return (
+                  <tr>
+                    <td style = { {textAlign: 'center'} } >
+                      <img src = {tweet.user.profile_image_url} />
+                      { tweet.user.screen_name }
+                    </td>
+                    <td>
+                    <div className="tweetContainer">
+                      { tweet.text }
+                    </div>
+                    </td>
+                  </tr>
+                );
+              });
+
+              break;
+
+            // if the content to be displayed is an "error message":
+            case 'ERROR':
+
+              // return the body of the table as a displayable error message,
+              tweetsTableBody = (
+                <tr>
+                  <td colSpan={2}>
+                    <ErrorMessage errorMessage = { this.props.errorMessage } />
+                  </td>
+                </tr>
+              );
+
+              break;
+
+            };
+
+          // return the appropriate table body content.
+          return (
+            <tbody>
+              { tweetsTableBody }
+            </tbody>
+            );
+
+        }
+
+      });
+
+
+
+      // A ReactJS component, which implements an animated loading message that
+      // is to be displayed.
+      //
+      var LoadingMessage = React.createClass({
+
+        render: function() {
+
+          return (
+            <span>
+              {/* Display an initial loading message. */}
+              <img src="images/loading.gif" />  { this.props.message }
+            </span>
+          );
+        }
+      });
+
+
+
+      // A ReactJS component, which implements an error message that is
+      // displayed within a standard Bootstrap alert.
+      //
+      var ErrorMessage = React.createClass({
+
+        render: function() {
+
+          return (
+
+            <div className="alert alert-danger" role="alert">
+              <strong>Error! </strong>
+              {/* Display the specified error message. */}
+              { this.props.errorMessage }
+            </div>
+
+          );
+        }
+      });
+
+
+
+      // Obtain the required twitter handle of the client, from the URL,
+      var clientTwitterHandle = getParameterValueFromUrl( 'clientTwitterHandle' );
+
+
+      // Renders the "TweetList" ReactJS component, within the specified container.
+      //
+      ReactDOM.render(
+        <TweetList clientTwitterHandle = { clientTwitterHandle } />,
+        document.getElementById('tweetListContainer')
+      );
+
+
+      // Obtains the value of the specified parameter, from this web page's URL:
+      //
+      function getParameterValueFromUrl( parameterName ) {
+
+      	var results = new RegExp('[\?&]' + parameterName + '=([^&#]*)').exec(window.location.href);
+
+      	if (results == null) {
+      		return null;
+      	}
+      	else {
+      		return results[1] || 0;
+      	}
+
+      }
+
+
+    </script>
+
+</body>
+
+</html>

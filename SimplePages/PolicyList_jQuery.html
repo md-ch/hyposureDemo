@@ -1,0 +1,609 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<!--
+
+      This example makes use of the standard Bootstrap "Modern Business" template,
+      which is downloadable from:
+
+          https://startbootstrap.com/template-overviews/modern-business/
+
+
+      The objectives of this example are as follows:
+
+        1) Obtain a list of policies (for a specified client) from a REST service
+           and display this list within an HTML table;
+
+        2) Obtain the details of a user-selected policy from a REST service and
+           display these details within an HMTL form.
+
+-->
+
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>HypoSure Demo</title>
+
+    <!-- Bootstrap Core CSS -->
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom CSS -->
+    <link href="css/modern-business.css" rel="stylesheet">
+
+    <!-- Custom Fonts -->
+    <link href="font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+
+    <!-- HypoSure CSS -->
+    <link href="css/HypoSure.css" rel="stylesheet">
+
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+
+</head>
+
+<body>
+
+    <!-- Navigation -->
+    <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+        <div class="container">
+
+            <!-- Brand and toggle get grouped for better mobile display -->
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="index.html">HypoSure Demo</a>
+            </div>
+
+            <!-- Collect the nav links, forms, and other content for toggling -->
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                <ul class="nav navbar-nav navbar-right">
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">Demo <b class="caret"></b></a>
+                        <ul class="dropdown-menu">
+                            <li>
+                                <a href="PolicyList_jQuery.html"> Simple Pages - Policy List (jQuery)</a>
+                            </li>
+
+                        </ul>
+                    </li>
+
+                </ul>
+            </div>
+            <!-- /.navbar-collapse -->
+
+        </div>
+        <!-- /.container -->
+    </nav>
+
+    <!-- Page Content -->
+    <div class="container">
+
+        <!-- Page Heading/Breadcrumbs -->
+        <div class="row">
+            <div class="col-lg-12">
+                <h1 class="page-header">Policy List
+                    <small>Simple Page (jQuery)</small>
+                </h1>
+                <ol class="breadcrumb">
+                    <li>
+						<a href="index.html">Home</a>
+                    </li>
+                    <li>
+						<a href="ClientList_jQuery.html">Client List</a>
+                    </li>
+                    <li class="active">
+                    	Policy List
+					</li>
+                </ol>
+            </div>
+        </div>
+        <!-- /.row -->
+
+
+        <!-- The Bootstrap grid row containing the policy master-detail information. -->
+        <div class="row">
+
+
+            <!-- The Bootstrap grid columns containing the policy list table. -->
+            <div class="col-md-7">
+
+                <!-- The table containing the list of policies. -->
+                <table id="policiesTable" class="table table-hover businessObjectList">
+
+                    <!-- The header of the policy list table. -->
+                    <thead>
+
+                        <!-- The table header row containing the actual headings. -->
+                        <tr>
+                            <th>#</th>
+                            <th>Registration</th>
+                            <th>Status</th>
+                            <th>Inception Date</th>
+                            <th>Premium</th>
+                            <th>Vehicle</th>
+                        </tr>
+                    </thead>
+
+                    <!-- The body of the policy list table, where a row for each policy will be added. -->
+                    <tbody>
+
+                        <tr>
+                            <td colspan="6">
+                                <span>
+                                      <!-- Displays an initial loading message, whilst obtaining the list of policy from the REST service. -->
+                                      <img src="images/loading.gif" /> Obtaining policy list . . .
+                                </span>
+                            </td>
+                        </tr>
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+
+            <!-- The Bootstrap grid columns containing the policy details form. -->
+            <div class="col-md-5">
+
+                <!-- The Bootstrap panel containing the policy details form. -->
+                <div class="panel panel-default businessObjectForm">
+
+                    <!-- The header of the policy details form. -->
+                    <div class="panel-heading">Policy Details:
+                    </div>
+
+                    <!-- The body of the policy details form. -->
+                    <div class="panel-body" style="padding: : 20px;">
+
+                        <!-- The policy details form, itself. -->
+                        <form id="policyDetailsForm">
+
+
+                            <!-- The policy's "expiry date" field. -->
+                            <div class="form-group">
+
+                                <label for="expiryDateTextInput">Expiry Date:</label>
+
+                                <input type="text" id="expiryDateTextInput" class="form-control" placeholder="yyyy-mm-dd">
+
+                            </div>
+
+                            <!-- The policy's "vehicle type" field. -->
+                            <div class="form-group">
+
+                                <label for="vehicleTypeTextInput">Vehicle Type:</label>
+
+                                <input type="text" id="vehicleTypeTextInput" class="form-control">
+
+                            </div>
+
+                            <!-- The policy's "vehicle make" field. -->
+                            <div class="form-group">
+
+                                <label for="vehicleMakeTextInput">Vehicle Make:</label>
+
+                                <input type="text" id="vehicleMakeTextInput" class="form-control">
+
+                            </div>
+
+                            <!-- The policy's "vehicle model" field. -->
+                            <div class="form-group">
+
+                                <label for="vehicleModelTextInput">Vehicle Model:</label>
+
+                                <input type="text" id="vehicleModelTextInput" class="form-control">
+
+                            </div>
+
+                            <!-- The policy's "year" field. -->
+                            <div class="form-group">
+
+                                <label for="yearTextInput">Year:</label>
+
+                                <input type="text" id="yearTextInput" class="form-control" maxlength="4" placeholder="9999">
+
+                            </div>
+
+                            <!-- The policy's "engine capacity" field. -->
+                            <div class="form-group">
+
+                                <label for="engineCCTextInput">Engine Capacity:</label>
+
+                                <input type="text" id="engineCCTextInput" class="form-control" maxlength="4" placeholder="9999">
+
+                            </div>
+
+                            <!-- The policy's "wheel size 1" field. -->
+                            <div class="form-group">
+
+                                <label for="wheelSize1TextInput">Wheel Size 1:</label>
+
+                                <input type="text" id="wheelSize1TextInput" class="form-control" maxlength="2" placeholder="99">
+
+                            </div>
+
+                            <!-- The policy's "wheel size 2" field. -->
+                            <div class="form-group">
+
+                                <label for="wheelSize2TextInput">Wheel Size 2:</label>
+
+                                <input type="text" id="wheelSize2TextInput" class="form-control" maxlength="2" placeholder="99">
+
+                            </div>
+
+                            <!-- The policy's "number of wheels" field. -->
+                            <div class="form-group">
+
+                                <label for="noWheelsTextInput">Number of Wheels:</label>
+
+                                <input type="text" id="noWheelsTextInput" class="form-control" maxlength="2" placeholder="99">
+
+                            </div>
+
+                            <!-- The policy's "tyre make" field. -->
+                            <div class="form-group">
+
+                                <label for="tyreMakeTextInput">Tyre Make:</label>
+
+                                <input type="text" id="tyreMakeTextInput" class="form-control">
+
+                            </div>
+
+                            <!-- The policy's "tyre value" field. -->
+                            <div class="form-group">
+
+                                <label for="tyreValueTextInput">Tyre Value:</label>
+
+                                <input type="text" id="tyreValueTextInput" class="form-control" maxlength="8" placeholder="99999.99">
+
+                            </div>
+
+                            <!-- The policy's "premium including vat" field. -->
+                            <div class="form-group">
+
+                                <label for="premiumIncludingVatTextInput">Premium Including VAT:</label>
+
+                                <input type="text" id="premiumIncludingVatTextInput" class="form-control" maxlength="10" placeholder="9999999.99">
+
+                            </div>
+
+                            <!-- The policy's "premium excluding vat" field. -->
+                            <div class="form-group">
+
+                                <label for="premiumExcludingVatTextInput">Premium Excluding VAT:</label>
+
+                                <input type="text" id="premiumExcludingVatTextInput" class="form-control" maxlength="10" placeholder="9999999.99">
+
+                            </div>
+
+                            <!-- The policy's "premium vat" field. -->
+                            <div class="form-group">
+
+                                <label for="premiumVatTextInput">Premium VAT:</label>
+
+                                <input type="text" id="premiumVatTextInput" class="form-control" maxlength="10" placeholder="9999999.99">
+
+                            </div>
+
+                            <!-- The policy's "cancellation reason" field. -->
+                            <div class="form-group">
+
+                                <label for="cancelReasonTextInput">Cancellation Reason:</label>
+
+                                <input type="text" id="cancelReasonTextInput" class="form-control">
+
+                            </div>
+
+
+                        </form>
+
+                        <!-- Displays a loading message, whilst obtaining the details of the selected policy, from the REST service. -->
+                        <div id="policyDetailsLoadingMessage">
+                            <img src="images/loading.gif" /> Obtaining policy details . . .
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+        <!-- /.row -->
+
+
+        <!-- Footer -->
+        <!--
+        <footer>
+            <div class="row">
+                <div class="col-lg-12">
+                    <p style="font-size: x-small;">Copyright &copy; ThoughMakers 2017 </p>
+                    <p style="font-size: xx-small;"> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; ... for the REST of your {iSeries} life. </p>
+                </div>
+            </div>
+      </footer>
+      -->
+
+    </div>
+
+
+    <!-- jQuery -->
+    <script src="js/jquery.js"></script>
+
+
+    <!-- Bootstrap Core JavaScript -->
+    <script src="js/bootstrap.min.js"></script>
+
+
+
+    <script type="text/javascript">
+
+
+      // Obtain the list of policies, once the HTML document has been loaded.
+      $(document).ready( getPolicyListFromRestApi );
+
+
+
+      // Obtains the (JSON serialized) list of policies, from the REST service:
+      //
+      function getPolicyListFromRestApi() {
+
+				// Obtain the required client number, from the URL,
+				var clientNumber = getParameterValueFromUrl('clientNumber');
+
+				// concatenate the URL for the call to the policy list REST service.
+				var policyListRestApiUrl = '';
+				policyListRestApiUrl += 'http://41.193.214.130:2510/eiftidemo/POL_LIST?';
+				policyListRestApiUrl += '&client=' + clientNumber;
+				//alert(policyListRestApiUrl);
+
+				// Specify the AJAX settings, for the call to policies REST service:
+				var ajaxCallSettings =
+				{
+
+					url: policyListRestApiUrl, // specify the URL to be called,
+
+					type: 'get',  // specify "get" as the type of HTTP request,
+
+					dataType: 'json',  // indicate that JSON data is to be returned,
+
+					success: displayPolicyListInTable,  // specify the callback function of a successfull call,
+
+					error: displayPolicyListError  // specify the callback function of an unsuccessfull call.
+
+				};
+
+				// Perform the actual AJAX call to the policies REST API, using the above settings.
+				$.ajax( ajaxCallSettings );
+
+      }
+
+
+
+      // Displays the list of policies (from the REST API), in the policies HTML table:
+      //
+      function displayPolicyListInTable( data ) {
+
+      	// If an error has occurred whilst calling the REST service:
+				if (data.error) {
+
+					// display the error message returned from the REST service,
+					$('#policiesTable > TBODY TD').html( data.error );
+
+					return; // exit and do not attempt to display the list of policies.
+
+				}
+
+
+				// Display the list of policies returned from the REST service:
+
+				// construct the HTML Table rows, for the policies returned from the REST API,
+				var policyRowsHtml = constructPolicyRowsHtml( data.policies );
+
+				// add the constructed HTML policy rows , to the policies HTML Table,
+				$('#policiesTable > TBODY').html( policyRowsHtml );
+
+				// specify the "on-click" event handler of each row:
+				$('#policiesTable > TBODY > TR').on('click', function( event) {
+
+					// obtain the user-selected row,
+					var selectedRow = $(event.target).parent();
+
+					// obtain the required client number, from the URL,
+					var clientNumber = getParameterValueFromUrl('clientNumber');
+
+					// obtain the policy number of the user-selected row,
+					var policyNumber = selectedRow.children(':first').text();
+
+					// obtain the details of the user-selected policy, from the REST service.
+					getPolicyDetailsFromRestApi( clientNumber, policyNumber );
+
+				});
+
+      }
+
+
+
+      // Construct the policy HTML table rows, for the specified policies array:
+      //
+      function constructPolicyRowsHtml( policies ) {
+
+				var policyRowsHtml = '';
+
+				// For each of the  10 policies, in the policies array:
+				for (i = 0; i < policies.length; i++) {
+
+					// construct an HTML table row, for the ith policy:
+					policyRowsHtml += '<TR>';
+					policyRowsHtml += '<TD>' + policies[i].policyNumber + '</TD>';
+					policyRowsHtml += '<TD>' + policies[i].registrationNumber + '</TD>';
+					policyRowsHtml += '<TD>' + policies[i].policyStatus + '</TD>';
+					policyRowsHtml += '<TD>' + policies[i].inceptionDate + '</TD>';
+					policyRowsHtml += '<TD>' + policies[i].premiumIncludingVat + '</TD>';
+					policyRowsHtml += '<TD>' + policies[i].vehicleMakeModel + '</TD>';
+					policyRowsHtml += '</TR>';
+
+				};
+
+				// return the constructed HTML table rows.
+				return policyRowsHtml;
+
+      }
+
+
+
+      // Displays the error message returned from an unsuccessful AJAX call to
+      // the policy list REST service:
+      //
+      function displayPolicyListError( xmlHttpRequest, status, error ) {
+
+				// Concatenate the error message to be displayed,
+				var errorMessage = '';
+				errorMessage += 'Unable to obtain the list of policies. ';
+				errorMessage += xmlHttpRequest.responseText;
+				errorMessage += error;
+
+				// display the concatenated error message.
+				$('#policiesTable > TBODY TD').html( errorMessage );
+
+      }
+
+
+
+
+      // Obtains the (JSON serialized) details of the specified policy,
+      // from the policy details REST service:
+      //
+      function getPolicyDetailsFromRestApi( clientNumber, policyNumber) {
+
+				// Concatenate the URL for the call to the policy details REST service.
+				var policyDetailsRestApiUrl = '';
+				policyDetailsRestApiUrl += 'http://41.193.214.130:2510/eiftidemo/POL_DET?';
+				policyDetailsRestApiUrl += 'policy=' + policyNumber;
+				policyDetailsRestApiUrl += '&client=' + clientNumber;
+				//alert(policyDetailsRestApiUrl);
+
+				// Specify the AJAX settings, for the call to policies REST service:
+				var ajaxCallSettings =
+				{
+					url: policyDetailsRestApiUrl, // specify the URL to be called,
+
+					type: 'get',  // specify "get" as the type of HTTP request,
+
+					dataType: 'json',  // indicate that JSON data is to be returned,
+
+					success: displayPolicyDetailsInForm,  // specify the callback function of a successfull call,
+
+					error: displayPolicyDetailsError  // specify the callback function of an unsuccessfull call.
+				};
+
+				// Perform the actual AJAX call to the policies REST API, using the above settings.
+				$.ajax( ajaxCallSettings );
+
+
+				// Hide the policy details form and display the loading message.
+				$( '#policyDetailsForm' ).hide("fast");
+				$( '#policyDetailsLoadingMessage' ).show("fast");
+
+      }
+
+
+
+
+      // Displays the specified policy's details (returned from the REST
+      // service) within the policy's HTML form:
+      //
+      function displayPolicyDetailsInForm( data ) {
+
+				// Obtain the "policy" object from the data returned,
+				var policy = data.policy[0];
+
+				// concatenate the header of the policy form,
+				var policyFormHeader = '';
+				policyFormHeader += '<b>';
+				//policyFormHeader += policy.registrationNumber;
+				policyFormHeader += ' Policy Details: ';
+				policyFormHeader += '</b>';
+
+				// display the header of the policy form,
+				$('.panel-heading').html( policyFormHeader );
+
+				// display the required data fields within the policy form.
+				$( expiryDateTextInput ).val( policy.expiryDate );
+				$( vehicleTypeTextInput ).val( policy.vehicleType );
+				$( vehicleMakeTextInput ).val( policy.vehicleMake )
+				$( vehicleModelTextInput ).val( policy.vehicleModel );
+				$( yearTextInput ).val( policy.year );
+				$( engineCCTextInput ).val( policy.engineCC );
+				$( wheelSize1TextInput ).val( policy.wheelSize1 );
+				$( wheelSize2TextInput ).val( policy.wheelSize2 );
+				$( noWheelsTextInput ).val( policy.noWheels );
+				$( tyreMakeTextInput ).val( policy.tyreMake );
+				$( tyreValueTextInput ).val( policy.tyreValue );
+				$( premiumIncludingVatTextInput ).val( policy.premiumIncludingVat );
+				$( premiumExcludingVatTextInput ).val( policy.premiumExcludingVat );
+				$( premiumVatTextInput ).val( policy.premiumVat );
+				$( cancelReasonTextInput ).val( policy.cancelReason );
+
+				// Hide the loading message and dislay policy details form.
+				$( '#policyDetailsLoadingMessage' ).hide("fast");
+				$( '#policyDetailsForm' ).show("slow");
+
+      }
+
+
+
+      // Displays the error message returned from an unsuccessful AJAX call to
+      // the policy details REST service:
+      //
+      function displayPolicyDetailsError( xmlHttpRequest, status, error ) {
+
+				// Concatenate the error message to be displayed,
+				var errorMessage = '';
+				errorMessage += 'Unable to obtain policy details. ';
+				//errorMessage += xmlHttpRequest.responseText;
+				errorMessage += error;
+
+				// display the concatenated error message.
+				$('.panel-body').text( errorMessage );
+
+      }
+
+
+
+      // Obtains the value of the specified parameter, from this web page's URL:
+      //
+			function getParameterValueFromUrl( parameterName ) {
+
+				var results = new RegExp('[\?&]' + parameterName + '=([^&#]*)').exec(window.location.href);
+
+				if (results == null) {
+					return null;
+				}
+				else {
+					return results[1] || 0;
+				}
+
+			}
+
+
+    </script>
+
+</body>
+
+</html>

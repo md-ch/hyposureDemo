@@ -1,0 +1,291 @@
+{
+	"auto_complete":
+	{
+		"selected_items":
+		[
+			[
+				"cli",
+				"clientNumber"
+			],
+			[
+				"h",
+				"href"
+			],
+			[
+				"text",
+				"text-align"
+			],
+			[
+				"cl",
+				"client"
+			],
+			[
+				"m",
+				"maxlength\tAttr"
+			],
+			[
+				"mar",
+				"margin-right"
+			],
+			[
+				"wi",
+				"width"
+			],
+			[
+				"di",
+				"div\tTag"
+			],
+			[
+				"fonts",
+				"font-size-adjust"
+			],
+			[
+				"clients",
+				"clients"
+			],
+			[
+				"he",
+				"max-height"
+			],
+			[
+				"clie",
+				"client"
+			],
+			[
+				"retur",
+				"return"
+			],
+			[
+				"fun",
+				"function"
+			],
+			[
+				"p",
+				"padding-left"
+			],
+			[
+				"font",
+				"font-family"
+			],
+			[
+				"error",
+				"errorMessage"
+			]
+		]
+	},
+	"buffers":
+	[
+	],
+	"build_system": "",
+	"build_system_choices":
+	[
+	],
+	"build_varint": "",
+	"command_palette":
+	{
+		"height": 132.0,
+		"last_filter": "insta",
+		"selected_items":
+		[
+			[
+				"insta",
+				"Install Package Control"
+			]
+		],
+		"width": 313.0
+	},
+	"console":
+	{
+		"height": 0.0,
+		"history":
+		[
+		]
+	},
+	"distraction_free":
+	{
+		"menu_visible": true,
+		"show_minimap": false,
+		"show_open_files": false,
+		"show_tabs": false,
+		"side_bar_visible": false,
+		"status_bar_visible": false
+	},
+	"file_history":
+	[
+		"/home/kayle/Documents/Programming/React/HypoSureDemo/SimplePages/work_area.txt",
+		"/home/kayle/Documents/Programming/React/HypoSureDemo/SimplePages/PolicyList_jQuery.html",
+		"/home/kayle/Documents/Programming/React/HypoSureDemo/SimplePages/ClientList_jQuery (backup).html",
+		"/home/kayle/Documents/Programming/React/HypoSureDemo/SimplePages/ClientList_jQuery.html",
+		"/home/kayle/Documents/Programming/React/HelloWorldReact/index.html",
+		"/var/www/html/Task1.php",
+		"/home/kayle/Documents/Programming/React/HelloWorldReact/HelloWorldReact.sublime-project",
+		"/home/kayle/Documents/ThoughtMakers/Projects/rest4i.com/public/HypoSureDemo/SimplePages/css/HypoSure.css",
+		"/home/kayle/Documents/ThoughtMakers/Projects/rest4i.com/public/HypoSureDemo/SimplePages/PolicyList_jQuery.html",
+		"/home/kayle/Documents/ThoughtMakers/Projects/rest4i.com/public/HypoSureDemo/SimplePages/ClientList_jQuery.html",
+		"/home/kayle/Documents/ThoughtMakers/Projects/rest4i.com/public/HypoSureDemo/SimplePages/index.html",
+		"/home/kayle/Documents/ThoughtMakers/Projects/rest4i.com/public/HypoSureDemo/SimplePages/ClientRestApiDemo.html",
+		"/home/kayle/Documents/ThoughtMakers/Projects/TestProject/README.md",
+		"/home/kayle/Documents/HypoSureDemo/SimplePages/css/HypoSure.css",
+		"/home/kayle/Documents/HypoSureDemo/SimplePages/ClientList_jQuery.html",
+		"/run/user/1000/gvfs/google-drive:host=gmail.com,user=kayle.maclou/0BwLSHCg9lG7vRy13NnZBR3JqRWc/0BwLSHCg9lG7vRFJtbGNvNVg2Qm8/0BwLSHCg9lG7vdTVra1k1WHUyTEk/0BwLSHCg9lG7vam83REVQMzRhX2M/0BwLSHCg9lG7vR3FSWkxFS2FSbEE/0BwLSHCg9lG7vWUZmSG5vVG8zbjQ/0BwLSHCg9lG7vblJQbEt3eWNXSDA",
+		"/home/kayle/Documents/HypoSureDemo/SimplePages/index.html",
+		"/home/kayle/Documents/HypoSureDemo/SimplePages/ClientListDemo.html",
+		"/home/kayle/Documents/HypoSureDemo/SimplePages/ClientList_jquery.html",
+		"/home/kayle/Documents/HypoSureDemo/SimplePages/jQuery/index.html",
+		"/home/kayle/Documents/HypoSureDemo/SimplePages/ClientRestApiDemo.html",
+		"/run/user/1000/gvfs/google-drive:host=gmail.com,user=kayle.maclou/0BwLSHCg9lG7vRy13NnZBR3JqRWc/0BwLSHCg9lG7vRFJtbGNvNVg2Qm8/0BwLSHCg9lG7vdTVra1k1WHUyTEk/0BwLSHCg9lG7vam83REVQMzRhX2M/0BwLSHCg9lG7vR3FSWkxFS2FSbEE/0BwLSHCg9lG7vbzhPaGpLekVZUVU"
+	],
+	"find":
+	{
+		"height": 28.0
+	},
+	"find_in_files":
+	{
+		"height": 90.0,
+		"where_history":
+		[
+		]
+	},
+	"find_state":
+	{
+		"case_sensitive": true,
+		"find_history":
+		[
+			"TD",
+			"length",
+			"                  <th>#</th>\n                  <th>ID Number</th>\n                  <th>Name</th>\n                  <th>Surname</th>\n                  <th>Title</th>\n                  <th>Language</th>",
+			"th",
+			"aler",
+			"getClientDetailsFromRestApi",
+			"Client",
+			"policY",
+			"client",
+			"clients",
+			"Clients",
+			"client",
+			"clients",
+			"client",
+			"Client",
+			"Clients",
+			"client",
+			"clients",
+			"display the requested list of clients in an HTML table",
+			"API",
+			"clientRowHtml"
+		],
+		"highlight": true,
+		"in_selection": false,
+		"preserve_case": false,
+		"regex": false,
+		"replace_history":
+		[
+			"Policy",
+			"policy",
+			"policY",
+			"policies",
+			"Policies",
+			"policies",
+			"policy",
+			"Policy",
+			"Policies",
+			"policy",
+			"policies",
+			"clientRowsHtml"
+		],
+		"reverse": false,
+		"show_context": true,
+		"use_buffer2": true,
+		"whole_word": false,
+		"wrap": true
+	},
+	"groups":
+	[
+		{
+			"sheets":
+			[
+			]
+		}
+	],
+	"incremental_find":
+	{
+		"height": 28.0
+	},
+	"input":
+	{
+		"height": 34.0
+	},
+	"layout":
+	{
+		"cells":
+		[
+			[
+				0,
+				0,
+				1,
+				1
+			]
+		],
+		"cols":
+		[
+			0.0,
+			1.0
+		],
+		"rows":
+		[
+			0.0,
+			1.0
+		]
+	},
+	"menu_visible": true,
+	"output.find_results":
+	{
+		"height": 0.0
+	},
+	"pinned_build_system": "",
+	"project": "ClientList_jQuery.sublime-project",
+	"replace":
+	{
+		"height": 52.0
+	},
+	"save_all_on_build": true,
+	"select_file":
+	{
+		"height": 0.0,
+		"last_filter": "",
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"select_project":
+	{
+		"height": 0.0,
+		"last_filter": "",
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"select_symbol":
+	{
+		"height": 0.0,
+		"last_filter": "",
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"selected_group": 0,
+	"settings":
+	{
+	},
+	"show_minimap": true,
+	"show_open_files": false,
+	"show_tabs": true,
+	"side_bar_visible": true,
+	"side_bar_width": 281.0,
+	"status_bar_visible": true,
+	"template_settings":
+	{
+	}
+}

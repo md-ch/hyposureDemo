@@ -1,0 +1,45 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <title></title>
+
+    <script src="jquery.js"></script>
+
+     
+    <script type="text/javascript">
+
+
+        $(document).ready(function () {
+
+            alert(1);
+            
+            this.settings = {
+                url: "http://41.193.214.130:2511/tidemodev/clt_list",
+                type: "get",
+                dataType: "json"
+            };
+            
+            $.ajax(this.settings)
+
+            .success(function (data) {
+                alert(2)
+                alert(data)
+            })
+
+            .error(function (jqXmlHttpRequest) {
+                alert(3)
+                alert(jqXmlHttpRequest.responseText)
+            });
+
+
+        });
+
+
+
+    </script>
+
+</head>
+<body>
+
+</body>
+</html>
